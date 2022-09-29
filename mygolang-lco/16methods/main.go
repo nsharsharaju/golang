@@ -27,6 +27,6 @@ func (u User) GetStatus() {
 }
 
 func (u User) NewMail() {
-	u.Email = "test@go.dev"
+	u.Email = "test2@go.dev"
 	fmt.Println("The new email of the users is", u.Email)
 }
