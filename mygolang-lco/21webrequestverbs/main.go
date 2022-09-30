@@ -4,12 +4,15 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
 func main() {
 	fmt.Println("Welcome to Web Requests")
 	PerformGetRequest()
+	PerformPostRequest()
+	PerformPostFormRequest()
 }
 
 func PerformGetRequest() {
@@ -34,4 +37,47 @@ func PerformGetRequest() {
 
 	fmt.Println(byteCount)
 	fmt.Println(responseString.String())
+}
+
+func PerformPostRequest() {
+	const myurl string = "http://localhost:8000/post"
+
+	//fake json payload
+
+	requestBody := strings.NewReader(`
+	 	{
+		"name": "harsha"
+		}
+	`)
+
+	response, err := http.Post(myurl, "application/json", requestBody)
+	if err != nil {
+		panic(err)
+	}
+	defer response.Body.Close()
+
+	content, err := ioutil.ReadAll(response.Body)
+
+	fmt.Println(string(content))
+}
+
+func PerformPostFormRequest() {
+	const myurl string = "http://localhost:8000/postform"
+
+	//form-data
+
+	form := url.Values{}
+
+	form.Add("name", "harsha")
+
+	response, err := http.PostForm(myurl, form)
+	if err != nil {
+		panic(err)
+	}
+
+	defer response.Body.Close()
+
+	content, err := ioutil.ReadAll(response.Body)
+
+	fmt.Println(string(content))
 }
